@@ -1,0 +1,105 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+
+
+class tarjans {
+    public:
+        tarjans(ll nodes, ll edges, map<ll, vector<ll>>&edgeList){
+            n = nodes;
+            numEdges = edges;
+            g = edgeList;
+            ids.resize(n);
+            low.resize(n);
+            onStack.resize(n);    
+        }
+
+        vector<ll> run(){
+            return findSccs();
+        }
+
+    private:
+        ll n;
+        ll numEdges;
+        map<ll, vector<ll>>g;
+        ll id=0;
+        ll sccCount=0;
+
+
+        vector<ll>ids;
+        vector<ll>low;
+        vector<bool>onStack;
+        stack<ll>s;
+
+
+        vector<ll> findSccs(){
+            for(ll i=0; i<n; i++){
+                ids[i]=-1;
+            }
+
+            for(ll i=0; i<n; i++){
+                if(ids[i]==-1){
+                    dfs(i);
+                }
+            }
+            return low;
+        }
+
+
+        int dfs(ll at){
+            s.push(at);
+            onStack[at]=true;
+            ids[at]=low[at]=id++;
+            
+            // Visit all neighbours & min low-link on callback
+            for(ll to:g[at]){
+                if(ids[to]==-1){
+                    dfs(to);
+                }
+                if(onStack[to]){
+                    low[at]=min(low[at], low[to]);
+                }
+            }
+
+            // After having visited all the neighbours of 'at'
+            // if we're at the start of a SCC empty the seen
+            // stack until until we're back to the start of the SCC.
+            if(ids[at]==low[at]){
+                while(true){
+                    ll node = s.top();
+                    s.pop();
+                    onStack[node]=false;
+                    low[node]=ids[at];
+                    if(node==at){
+                        break;
+                    }
+                }
+                sccCount++;
+            }
+            return 0;
+        }
+};
+
+
+int main(){
+    ll n;
+    cin>>n;
+    ll e;
+    cin>>e;
+    map<ll, vector<ll>>edgeList;
+    while(e--){
+        ll x, y;
+        cin>>x>>y;
+        edgeList[x].push_back(y);
+        edgeList[y].push_back(x);
+    }
+    tarjans tar(n, e, edgeList);
+    vector<ll>ans = tar.run();
+    for(auto i:ans){
+        cout<<i<<" ";   
+    }
+    cout<<endl;
+
+    return 0;
+}
