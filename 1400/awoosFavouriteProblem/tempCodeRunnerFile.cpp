@@ -1,2 +1,0 @@
-
-                    cout<<"NO"<<endl;
