@@ -1,8 +1,16 @@
+// Import C++ standard library stuff
 #include<bits/stdc++.h>
+
+
+// Shorten "long long" to just "ll"
 #define ll long long
+
+
+// Makes syntax a bit cleaner
 using namespace std;
 
 
+// The solution
 void solution(){
 
     // n = number of rows
@@ -210,10 +218,15 @@ void solution(){
 }
 
 
-
+// Main function
 int main(){
+    
+    
+    // Faster input
     ios::sync_with_stdio(0);
     cin.tie(0);
 
+    
+    // Call solution function
     solution();
 }
